@@ -13,3 +13,10 @@ git push origin master --tags
 
 # Skipping GPG
 To skip GPG locally, use -Dgpg.skip
+
+# To Release
+
+1. Commit all changes
+2. Tag the current location with a tag of the form "release-xxx" where xxx is the version number, eg "git tag -a release-1.1.1"
+3. Push the branch and tags to master, CircleCI will take it from there, eg "git push origin master --tags"
+4. Login to Sonatype and close/release
