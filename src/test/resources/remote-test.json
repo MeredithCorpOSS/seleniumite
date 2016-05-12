@@ -1,0 +1,56 @@
+{
+  "localRunIncluded" : false,
+  "url" : "http://${BROWSERSTACK_USER}:${BROWSERSTACK_AUTOMATE_KEY}@hub.browserstack.com/wd/hub",
+  "remoteEnvironments" :
+  [
+    {
+      "platform" : "WINDOWS",
+      "browserName" : "chrome",
+      "browserVersion" : "27"
+    },
+    {
+      "platform" : "WINDOWS",
+      "browserName" : "firefox",
+      "browserVersion" : "20"
+    },
+    {
+      "platform" : "WINDOWS",
+      "browserName" : "ie",
+      "browserVersion" : "9"
+    },
+    {
+      "platform" : "MAC",
+      "browserName" : "iPhone",
+      "otherData" :
+      {
+        "device" : "iPhone 5S"
+      }
+    },
+    {
+      "platform" : "MAC",
+      "browserName" : "Safari",
+      "browserVersion" : "8.0",
+      "otherData":
+      {
+        "os" : "OS X",
+        "os_version" : "Yosemite",
+        "resolution" : "1600x1200"
+      }
+    }
+  ],
+  "globalDriverData" : {
+    "build" : "${BROWSERSTACK_PROJECT_NAME} ${BROWSERSTACK_BUILD}",
+    "projectName" : "${BROWSERSTACK_PROJECT_NAME}",
+    "screenshotsTaken" : "${BROWSERSTACK_TAKE_SCREENSHOTS}",
+    "acceptSslCerts" : "true",
+    "browserstack.debug" : "true"
+  },
+  "overrides" : {
+    "test-a-override" : "Example test value A"
+  },
+  "rawSourceRoots" :
+  [
+    "classpath:/tests"
+  ]
+
+}

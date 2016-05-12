@@ -1,0 +1,55 @@
+{
+  "type": "script",
+  "seleniumVersion": "2",
+  "formatVersion": 2,
+  "steps": [
+    {
+      "type": "get",
+      "url": "https://www.yahoo.com/"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "p_13838465-p"
+      },
+      "text": "cat"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "nav-col"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "p_13838465-p"
+      },
+      "text": "cat and dog"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "search-submit"
+      }
+    },
+    {
+      "type": "waitForTextPresent",
+      "text": "Cats & Dogs (2001) - IMDb"
+    },
+    {
+      "type": "verifyTextPresent",
+      "text": "Cats & Dogs (2001) - IMDb"
+    }
+  ],
+  "data": {
+    "configs": {},
+    "source": "none"
+  },
+  "inputs": [],
+  "timeoutSeconds": 60
+}

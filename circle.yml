@@ -1,0 +1,23 @@
+machine:
+  java:
+    version:
+      oraclejdk8
+dependencies:
+ override: 
+  - mvn --fail-never dependency:go-offline || true
+general:
+  artifacts:
+    - "target" # relative to the build directory
+test:
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+# Using this means that it'll only deploy to artifactory if a release tag is pushed
+deployment:
+  release:
+    tag: /release-.*/
+    commands:
+       # Filter the pom files to actually have the version number in it
+       - find . -type f -regex ".*/pom\.xml" -exec sed -i.bak s/LOCAL-SNAPSHOT/${CIRCLE_TAG:8}+$BUILD_NUMBER/ {} \;
+       # Build and release the product
+       - mvn -s build_server_maven_settings.xml -DskipTests javadoc:jar source:jar deploy

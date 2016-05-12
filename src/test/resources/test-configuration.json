@@ -1,0 +1,13 @@
+{
+  "localRunIncluded" : true,
+  "remoteEnvironments" : [],
+  "overrides" : {
+    "test-a" : "Example test value A1"
+  },
+  "rawSourceRoots" :
+  [
+    "classpath:/tests"
+  ]
+
+}
+
