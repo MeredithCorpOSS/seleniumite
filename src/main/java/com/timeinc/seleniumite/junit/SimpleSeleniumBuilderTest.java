@@ -80,7 +80,10 @@ public class SimpleSeleniumBuilderTest {
         {
             int preCount = rval.size();
             Pattern pattern = Pattern.compile(testFilter);
-            rval.stream().forEach((p)->LOG.info(" Source : {} , {}",p.getSource().getName(), p.getSource().getOptionalSourceFile()));
+            if (LOG.isTraceEnabled())
+            {
+                rval.stream().forEach((p)->LOG.trace(" Source : {} , {}",p.getSource().getName(), p.getSource().getOptionalSourceFile()));
+            }
 
             rval = rval.stream().filter((p)->p.getSource().matchesFilter(pattern)).collect(Collectors.toList());
             LOG.info("After applying filter {} to {} source files, {} remain", testFilter, preCount, rval.size());

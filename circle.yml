@@ -2,22 +2,30 @@ machine:
   java:
     version:
       oraclejdk8
+
+
 dependencies:
- override: 
+ override:
   - mvn --fail-never dependency:go-offline || true
-general:
-  artifacts:
-    - "target" # relative to the build directory
+
 test:
-  post:
-    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+ post:
+  - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+  - find . -type f -regex ".*/target/.*-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+
 # Using this means that it'll only deploy to artifactory if a release tag is pushed
 deployment:
-  release:
-    tag: /release-.*/
-    commands:
-       # Filter the pom files to actually have the version number in it
-       - find . -type f -regex ".*/pom\.xml" -exec sed -i.bak s/LOCAL-SNAPSHOT/${CIRCLE_TAG:8}+$BUILD_NUMBER/ {} \;
-       # Build and release the product
-       - mvn -s build_server_maven_settings.xml -DskipTests javadoc:jar source:jar deploy
+ release:
+   tag: /release-.*/
+   commands:
+   # Decrypt the keyrings
+   - gpg --passphrase $GPG_KEYFILE_ENCRYPT_PASSPHRASE --decrypt --output $HOME/pubring.gpg circleci/pubring.gpg.enc
+   - gpg --passphrase $GPG_KEYFILE_ENCRYPT_PASSPHRASE --decrypt --output $HOME/secring.gpg circleci/secring.gpg.enc
+   # Filter the pom files to actually have the version number in it
+   - find . -type f -regex ".*/pom\.xml" -exec sed -i.bak s/LOCAL-SNAPSHOT/${CIRCLE_TAG:8}+$BUILD_NUMBER/ {} \;
+   # This is actually significantly easier than trying to use the maven release plugin when you wont be pushing to master,
+   # and when the tagging has already happened
+   # Build and upload
+   - mvn --settings circleci/build_server_maven_settings.xml -Dgpg.passphrase=$GPG_PASSPHRASE -Dgpg.keyname=$GPG_KEYNAME -Dgpg.homedir=$HOME -DskipTests javadoc:jar source:jar deploy
+   - rm $HOME/pubring.gpg
+   - rm $HOME/secring.gpg
