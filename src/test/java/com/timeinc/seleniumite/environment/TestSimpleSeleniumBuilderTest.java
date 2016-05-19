@@ -34,6 +34,8 @@ import org.slf4j.LoggerFactory;
 /**
  * This class shouldn't really be run as a test - its mainly here so I can test downstream stuff in
  * remote drivers like browserstack without having to build into another project
+ *
+ * Uncomment me to actually run this test
  * Created by cweiss1271 on 12/2/15.
  */
 //@RunWith(Suite.class)

@@ -26,8 +26,12 @@ package com.timeinc.seleniumite.environment;
 
 import com.sebuilder.interpreter.Script;
 import com.sebuilder.interpreter.factory.ScriptFactory;
+import com.sebuilder.interpreter.factory.StepTypeFactory;
 import com.sebuilder.interpreter.webdriverfactory.WebDriverFactory;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +50,8 @@ import java.util.List;
  * Created by cweiss1271 on 11/9/15.
  */
 public class RawSourceTestingEnvironment implements TestingEnvironment {
+    private static final Logger LOG = LoggerFactory.getLogger(RawSourceTestingEnvironment.class);
+
     private RawTestScript source;
     private TestingEnvironment wrapped;
 
@@ -87,16 +93,31 @@ public class RawSourceTestingEnvironment implements TestingEnvironment {
 
     public List<Script> createScripts() {
         try {
+            List<Script> rval = null;
             ScriptFactory sf = new ScriptFactory();
+            sf.setStepTypeFactory(createStepTypeFactory());
             if (source.getOptionalSourceFile() != null) {
-                return sf.parse(source.getOptionalSourceFile());
+                rval = sf.parse(source.getOptionalSourceFile());
             } else {
                 File f = new File(source.getName());
-                return sf.parse(source.getRawTestContents(), f);
+                rval = sf.parse(source.getRawTestContents(), f);
             }
+
+            return rval;
+
         } catch (IOException | JSONException e) {
             throw new RuntimeException("Converting to runtime since cant do anything with it", e);
         }
+    }
+
+    protected StepTypeFactory createStepTypeFactory()
+    {
+        StepTypeFactory rval = new StepTypeFactory();
+        String secondary = EnvironmentUtils.findEnvOrProperty("stepTypePackage","com.timeinc.seleniumite.extension.steptype");
+        rval.setSecondaryPackage(secondary);
+
+        LOG.trace("Using secondary step types from {}", secondary);
+        return rval;
     }
 
     public String toString() {

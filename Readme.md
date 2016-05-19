@@ -28,3 +28,24 @@ per environment, per Selenium Json file; we here leverage @Parameterized above t
 These can be found at src/test/resources (remote-test.json is a remote test, test-configuration.json is a local one)
 
 
+---
+
+## Configurable options
+
+*testFilter*
+If a testFilter param is set via system property or environmental variable (e.g. : -DtestFilter=.*0021.* ) then the
+SimpleSeleniumBuilderTest class will filter the set of all matching test cases down to only those that match the 
+regular expression that was passed (either the name or the full file path much match the passed expression)
+
+*includeStackTraces*
+If set to true (e.g. -DincludeStackTraces=true) the output on any test that fails due to an exception will include
+the full stack trace - by default, only the message is included.
+
+*retryPredicateClass*
+If set (e.g., -DretryPredicateClass=com.timeinc.seleniumite.NotClickablePredicate) then whenever an exception is thrown
+for a given step, it will be checked with this  pdicate and if the predicate returns true, the step will be retried 
+(up to 3 times, with 3 second waits between.  I plan to parameterize this in the future, but not right now).
+
+Seleniumite includes a built in class, NotClickablePredicate, which handles the common usage of a library like 
+JQuery's BlockUI - if BlockUI happens to be up when the click is attempted, Selenium will just wait and then
+try again if this retry predicate is specified.
