@@ -33,7 +33,7 @@ public class RetryingTestRunFactory extends TestRunFactory {
     }
 
     /**
-     * @param script
+     * @param script Script to create a TestRun object for
      * @return A TestRun for the script
      */
     public RetryingTestRun createTestRun(Script script) {
@@ -41,8 +41,8 @@ public class RetryingTestRunFactory extends TestRunFactory {
     }
 
     /**
-     * @param script
-     * @param initialVars
+     * @param script Script object to run
+     * @param initialVars Map containing any initial variables
      * @return A TestRun for the script
      */
     public RetryingTestRun createTestRun(Script script, Map<String, String> initialVars) {
@@ -50,10 +50,10 @@ public class RetryingTestRunFactory extends TestRunFactory {
     }
 
     /**
-     * @param script
-     * @param log
-     * @param webDriverFactory
-     * @param webDriverConfig
+     * @param script Script object to run
+     * @param log Log object for logging (Commons logging)
+     * @param webDriverFactory WebDriverFactory to create webdrivers
+     * @param webDriverConfig Map containing configuration for the webdriver
      * @return A new instance of TestRun
      */
     public RetryingTestRun createTestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
@@ -61,11 +61,11 @@ public class RetryingTestRunFactory extends TestRunFactory {
     }
 
     /**
-     * @param script
-     * @param log
-     * @param webDriverFactory
-     * @param webDriverConfig
-     * @param initialVars
+     * @param script Script object to run
+     * @param log Log object for logging (Commons logging)
+     * @param initialVars Map containing any initial variables
+     * @param webDriverFactory WebDriverFactory to create webdrivers
+     * @param webDriverConfig Map containing configuration for the webdriver
      * @return A new instance of TestRun
      */
     public RetryingTestRun createTestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig, Map<String, String> initialVars) {
@@ -73,12 +73,12 @@ public class RetryingTestRunFactory extends TestRunFactory {
     }
 
     /**
-     * @param script
-     * @param log
-     * @param webDriverFactory
-     * @param webDriverConfig
-     * @param initialVars
-     * @param previousRun
+     * @param script Script object to run
+     * @param log Log object for logging (Commons logging)
+     * @param initialVars Map containing any initial variables
+     * @param previousRun TestRun object of the previous run of this test
+     * @param webDriverFactory WebDriverFactory to create webdrivers
+     * @param webDriverConfig Map containing configuration for the webdriver
      * @return A new instance of TestRun, using the previous run's driver and vars if available.
      */
     public RetryingTestRun createTestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig, Map<String, String> initialVars, TestRun previousRun) {

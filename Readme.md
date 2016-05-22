@@ -49,3 +49,7 @@ for a given step, it will be checked with this  pdicate and if the predicate ret
 Seleniumite includes a built in class, NotClickablePredicate, which handles the common usage of a library like 
 JQuery's BlockUI - if BlockUI happens to be up when the click is attempted, Selenium will just wait and then
 try again if this retry predicate is specified.
+
+*runSingleThreaded*
+If set to true (e.g. -DrunSingleThreaded=true) then the tests will run globally single-threaded - useful for if
+you have test setup that cannot run multithreaded.

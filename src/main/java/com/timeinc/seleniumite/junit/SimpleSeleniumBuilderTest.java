@@ -41,7 +41,6 @@ import com.googlecode.junittoolbox.ParallelParameterized;
 import com.sebuilder.interpreter.RetryingTestRun;
 import com.sebuilder.interpreter.Script;
 import com.sebuilder.interpreter.Step;
-import com.timeinc.seleniumite.NotClickablePredicate;
 import com.timeinc.seleniumite.environment.*;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
@@ -70,8 +69,10 @@ import java.util.stream.Collectors;
 public class SimpleSeleniumBuilderTest {
     private static final Logger LOG = LoggerFactory.getLogger(SimpleSeleniumBuilderTest.class);
     private static Map<String, SessionId> sessionRegistry = new ConcurrentHashMap<>();
+    private static Object GLOBAL_TEST_LOCK = new Object();
     private RawSourceTestingEnvironment testingEnvironment;
     private boolean includeStackTracesInLogs = "true".equalsIgnoreCase(EnvironmentUtils.findEnvOrProperty("includeStackTraces"));
+    private boolean runSingleThreaded = "true".equalsIgnoreCase(EnvironmentUtils.findEnvOrProperty("runSingleThreaded"));
 
     public SimpleSeleniumBuilderTest(RawSourceTestingEnvironment testingEnvironment) {
         this.testingEnvironment = testingEnvironment;
@@ -102,10 +103,26 @@ public class SimpleSeleniumBuilderTest {
     public void setUp() throws Exception {
     }
 
-
     @Test
-    public void testingSeleniumIdeFile() throws Exception {
-        LOG.info("Processing file : {}", testingEnvironment);
+    public void performTesting() throws Exception
+    {
+        if (runSingleThreaded)
+        {
+            synchronized (GLOBAL_TEST_LOCK)
+            {
+                testSeleniumIdeFile();
+            }
+        }
+        else
+        {
+            testSeleniumIdeFile();
+        }
+
+    }
+
+    public void testSeleniumIdeFile() throws Exception {
+        String threaded = (runSingleThreaded)?"Single-Thread":"Multi-Threaded";
+        LOG.info("{} processing file : {}", threaded,testingEnvironment);
 
         List<String> failures = new LinkedList<>();
         RetryingTestRun lastRun = null;
@@ -128,7 +145,7 @@ public class SimpleSeleniumBuilderTest {
 
                     if (!lastRun.hasNext())
                     {
-                        LOG.warn("Has Next is false and havent started yet");
+                        LOG.warn("Has next is false and havent started yet");
                     }
 
                     // Actually run the script
@@ -217,7 +234,7 @@ public class SimpleSeleniumBuilderTest {
         String predicateClass = EnvironmentUtils.findEnvOrProperty("retryPredicateClass");
         if (predicateClass!=null)
         {
-            LOG.info("Attrmping to create retry predicate for class : {}",predicateClass);
+            LOG.info("Attempting to create retry predicate for class : {}",predicateClass);
             try
             {
                 rval = (Predicate<Exception>)Class.forName(predicateClass).newInstance();

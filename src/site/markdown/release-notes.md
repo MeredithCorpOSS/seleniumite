@@ -1,5 +1,10 @@
 ## Release Notes
 
+# Version 0.0.4
+Backwards compatible feature release
+* Added ability to single thread a test run
+* Better Javadoc
+
 # Version 0.0.3
 Backwards compatible feature release 
 * Added better logging of what line is failing in the test
