@@ -1,5 +1,9 @@
 ## Release Notes
 
+# Version 0.0.5
+Backwards compatible bugfix release
+* Fixed Parameterized function in SimpleSeleniumBuilderTest to return a Object[]
+
 # Version 0.0.4
 Backwards compatible feature release
 * Added ability to single thread a test run
