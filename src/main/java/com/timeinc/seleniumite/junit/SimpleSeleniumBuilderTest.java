@@ -56,10 +56,7 @@ import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -79,7 +76,7 @@ public class SimpleSeleniumBuilderTest {
     }
 
     @Parameterized.Parameters
-    public static List<RawSourceTestingEnvironment> getEnvironments() throws Exception {
+    public static Collection<Object[]> getEnvironments() throws Exception {
         List<RawSourceTestingEnvironment> rval = DefaultRawGlobalTestConfiguration.getDefault().createRawSourcedEnvironments();
 
         String testFilter = EnvironmentUtils.findEnvOrProperty("testFilter");
@@ -96,7 +93,9 @@ public class SimpleSeleniumBuilderTest {
             LOG.info("After applying filter {} to {} source files, {} remain", testFilter, preCount, rval.size());
         }
 
-        return rval;
+        // Since Parameters REALY wants an array of objects
+        List<Object[]> castToExpectedValue = rval.stream().map(p->new Object[]{p}).collect(Collectors.toList());
+        return castToExpectedValue;
     }
 
     @Before
