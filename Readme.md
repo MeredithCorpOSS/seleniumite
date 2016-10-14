@@ -43,7 +43,7 @@ the full stack trace - by default, only the message is included.
 
 *retryPredicateClass*
 If set (e.g., -DretryPredicateClass=com.timeinc.seleniumite.NotClickablePredicate) then whenever an exception is thrown
-for a given step, it will be checked with this  pdicate and if the predicate returns true, the step will be retried 
+for a given step, it will be checked with this  predicate and if the predicate returns true, the step will be retried 
 (up to 3 times, with 3 second waits between.  I plan to parameterize this in the future, but not right now).
 
 Seleniumite includes a built in class, NotClickablePredicate, which handles the common usage of a library like 
